@@ -2,7 +2,7 @@ package hello.core.member;
 
 import java.util.HashMap;
 
-public class memoryMemberRepository implements MemberRepository{
+public class MemoryMemberRepository implements MemberRepository{
 
     // 메모리 저장소 생성
     private static HashMap<Long, Member> store = new HashMap<>();
