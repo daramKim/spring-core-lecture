@@ -11,6 +11,8 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -38,6 +40,21 @@ public class ApplicationContestBasicFindTest {
         MemberService memberService = ac.getBean(MemberServiceImpl.class);
         assertThat(memberService).isInstanceOf(MemberServiceImpl.class);
     }
+
+    @Test
+    @DisplayName("전체 오브젝트 빈 조회") // object를 기본적으로 상속받기 때문에 object 타입으로 조회시 전체가 조회됌.
+    void findAllBeanByObjectType(){
+        Map<String, Object> beansOfType = ac.getBeansOfType(Object.class);
+        for (String key : beansOfType.keySet()) {
+            System.out.println("key = " + key + " value=" +
+                    beansOfType.get(key));
+        }
+    }
+
+
+
+
+
 
 
     // 실패 케이스 테스트
