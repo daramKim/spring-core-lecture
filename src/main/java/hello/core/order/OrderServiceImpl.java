@@ -22,8 +22,23 @@ public class OrderServiceImpl implements OrderService {
     //   - 순수 자바 테스트 코드에는 당연히 @AutoWired가 동작하지 않는다. (@SpringBootTest 처럼 스프링 컨테이너를 테스트에 통합한 경우에만 가능함.)
     //   - 스프링 설정을 목적으로 하는 @Configuration 같은 곳에서만 특별하게 사용 할 수는 있음.
 
-    @Autowired private MemberRepository memberRepository;
-    @Autowired private DiscountPolicy discountPolicy;
+    private MemberRepository memberRepository;
+    private DiscountPolicy discountPolicy;
+
+    // 4. 일반 메서드 주입
+    // 일반 메서드를 통해서 주입 받을 수 있다. (메서드명만 다르지 개념은 setter 주입과 같다고 보면 됌.)
+    // 특징
+    // 1. 한번에 여러 필드를 주입 받을 수 있다.
+    // 2. 일반적으로 잘 사용 안함. (쓰지마라)
+
+    @Autowired
+    public void init(MemberRepository memberRepository, DiscountPolicy
+            discountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = discountPolicy;
+    }
+
+
 
     // @Autowired 를 사용하면 생성자에서 여러 의존관계도 한번에 주입받을 수 있다.
     // 생성자가 딱 1개만 있으면 @Autowired 를 생략해도 자동주입이 된다. (물론 스프링 빈일 경우만)
