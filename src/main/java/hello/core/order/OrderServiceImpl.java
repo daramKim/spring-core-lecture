@@ -3,13 +3,26 @@ package hello.core.order;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component
+
+
+// 롬복 라이브러리가 제공하는 @RequiredArgsConstructor 기능을 사용하면 final이 붙은 필드를 모아서
+// 생성자를 자동으로 만들어준다. (코드에는 보이지 않지만 실제 호출 가능하다. Structure Navigator로 확인 가능.)
+
+/*
+    [정리]
+    최근에는 생성자를 딱 1개 두고, @Autowired 를 생략하는 방법을 주로 사용한다. 여기에 Lombok
+    라이브러리의 @RequiredArgsConstructor 함께 사용하면 기능은 다 제공하면서, 코드는 깔끔하게
+    사용할 수 있다.
+*/
+@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
-//    private final MemberRepository memberRepository;
-//    private final DiscountPolicy discountPolicy;
+    private final MemberRepository memberRepository;
+    private final DiscountPolicy discountPolicy;
 
 
     // 3. 필드 주입
@@ -21,8 +34,8 @@ public class OrderServiceImpl implements OrderService {
     //   - 순수 자바 테스트 코드에는 당연히 @AutoWired가 동작하지 않는다. (@SpringBootTest 처럼 스프링 컨테이너를 테스트에 통합한 경우에만 가능함.)
     //   - 스프링 설정을 목적으로 하는 @Configuration 같은 곳에서만 특별하게 사용 할 수는 있음.
 
-    private MemberRepository memberRepository;
-    private DiscountPolicy discountPolicy;
+//    private MemberRepository memberRepository;
+//    private DiscountPolicy discountPolicy;
 
     // 4. 일반 메서드 주입
     // 일반 메서드를 통해서 주입 받을 수 있다. (메서드명만 다르지 개념은 setter 주입과 같다고 보면 됌.)
@@ -51,12 +64,12 @@ public class OrderServiceImpl implements OrderService {
     // 1. 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
     // 2. 불편, 필수 의존관계에 사용
     // @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-        System.out.println("memberRepository = " + memberRepository);
-        System.out.println("discountPolicy = " + discountPolicy);
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
+//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+//        System.out.println("memberRepository = " + memberRepository);
+//        System.out.println("discountPolicy = " + discountPolicy);
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = discountPolicy;
+//    }
 
     // 2. 수정자 주입(setter 주입) 방법(의존관계 주입 방법)
     // 특징
