@@ -3,7 +3,6 @@ package hello.core.order;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -31,29 +30,33 @@ public class OrderServiceImpl implements OrderService {
     // 1. 한번에 여러 필드를 주입 받을 수 있다.
     // 2. 일반적으로 잘 사용 안함. (쓰지마라)
 
-    @Autowired
-    public void init(MemberRepository memberRepository, DiscountPolicy
-            discountPolicy) {
-        this.memberRepository = memberRepository;
-        this.discountPolicy = discountPolicy;
-    }
+//    @Autowired
+//    public void init(MemberRepository memberRepository, DiscountPolicy
+//            discountPolicy) {
+//        this.memberRepository = memberRepository;
+//        this.discountPolicy = discountPolicy;
+//    }
 
 
-
-    // @Autowired 를 사용하면 생성자에서 여러 의존관계도 한번에 주입받을 수 있다.
-    // 생성자가 딱 1개만 있으면 @Autowired 를 생략해도 자동주입이 된다. (물론 스프링 빈일 경우만)
+    // [ @Autowired ]
+    // ㄱ. @Autowired 를 사용하면 생성자에서 여러 의존관계도 한번에 주입받을 수 있다.
+    // ㄴ. 생성자가 딱 1개만 있으면 @Autowired 를 생략해도 자동주입이 된다. (물론 스프링 빈일 경우만)
+    // ㄷ. 옵션처리 가능
+    //   - 주입할 스프링 빈이 없어도 동작해야 할 때가 있음.
+    //   - 그런데 @AutoWired 가 있으면 자동 주입 대상이 되어서 없으면 오류가 발생한다.
+    //   - default가 @Autowired(required = true)
 
     // ㄱ. 생성자 주입 방법(의존관계 주입 방법)
     // 특징
     // 1. 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
     // 2. 불편, 필수 의존관계에 사용
     // @Autowired
-    /*public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         System.out.println("memberRepository = " + memberRepository);
         System.out.println("discountPolicy = " + discountPolicy);
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
-    }*/
+    }
 
     // 2. 수정자 주입(setter 주입) 방법(의존관계 주입 방법)
     // 특징

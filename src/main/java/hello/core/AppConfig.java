@@ -6,6 +6,7 @@ import hello.core.member.MemberService;
 import hello.core.member.MemberServiceImpl;
 import hello.core.member.MemoryMemberRepository;
 import hello.core.order.OrderService;
+import hello.core.order.OrderServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,24 +16,24 @@ public class AppConfig {
     @Bean
     public MemberService memberService(){
         System.out.println("AppConfig.memberService");
-        return new MemberServiceImpl(getMemberRepository());
+        return new MemberServiceImpl(memberRepository());
     }
 
     @Bean
-    public MemoryMemberRepository getMemberRepository() {
-        System.out.println("AppConfig.getMemberRepository");
+    public MemoryMemberRepository memberRepository() {
+        System.out.println("AppConfig.memberRepository");
         return new MemoryMemberRepository();
     }
 
     @Bean
     public OrderService orderService(){
         System.out.println("AppConfig.orderService");
-//        return new OrderServiceImpl(getMemberRepository(), getDiscountPolicy());
-        return null;
+        return new OrderServiceImpl(memberRepository(), discountPolicy());
+//        return null;
     }
 
     @Bean
-    public DiscountPolicy getDiscountPolicy() {
+    public DiscountPolicy discountPolicy() {
 //        return new RateDiscountPolicy();
         return new FixDiscountPolicy();
     }
