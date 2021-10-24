@@ -3,7 +3,7 @@ package hello.core.order;
 import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
     라이브러리의 @RequiredArgsConstructor 함께 사용하면 기능은 다 제공하면서, 코드는 깔끔하게
     사용할 수 있다.
 */
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
 
     private final MemberRepository memberRepository;
@@ -58,18 +58,19 @@ public class OrderServiceImpl implements OrderService {
     //   - 주입할 스프링 빈이 없어도 동작해야 할 때가 있음.
     //   - 그런데 @AutoWired 가 있으면 자동 주입 대상이 되어서 없으면 오류가 발생한다.
     //   - default가 @Autowired(required = true)
+    // ㄹ. 컴포넌트 스캔은 기본적으로 타입(DiscountPolicy 과 같은)으로 조회되는데, 타입에 대한 구현체(@Component 어노테이션 매겨놓아서 스프링 Bean으로 등록된 것들 예를 들면 FixDiscountPolicy, RateDiscountPolicy..)
+    //     들이 2개 이상이 조회되는 경우(중복 조회시) 구체적으로 지정하고 싶은 bean을 파라미터명으로 지정하여 선택가능(@Autowired 의 기능)
+    //      - 첫글자는 소문자로 변경 해야함
 
     // ㄱ. 생성자 주입 방법(의존관계 주입 방법)
     // 특징
     // 1. 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
     // 2. 불편, 필수 의존관계에 사용
-    // @Autowired
-//    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
-//        System.out.println("memberRepository = " + memberRepository);
-//        System.out.println("discountPolicy = " + discountPolicy);
-//        this.memberRepository = memberRepository;
-//        this.discountPolicy = discountPolicy;
-//    }
+    @Autowired
+    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy rateDiscountPolicy) {
+        this.memberRepository = memberRepository;
+        this.discountPolicy = rateDiscountPolicy;
+    }
 
     // 2. 수정자 주입(setter 주입) 방법(의존관계 주입 방법)
     // 특징
