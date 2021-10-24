@@ -4,6 +4,7 @@ import hello.core.discount.DiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -67,9 +68,9 @@ public class OrderServiceImpl implements OrderService {
     // 1. 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
     // 2. 불편, 필수 의존관계에 사용
     @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy rateDiscountPolicy) {
+    public OrderServiceImpl(MemberRepository memberRepository, @Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
-        this.discountPolicy = rateDiscountPolicy;
+        this.discountPolicy = discountPolicy;
     }
 
     // 2. 수정자 주입(setter 주입) 방법(의존관계 주입 방법)
