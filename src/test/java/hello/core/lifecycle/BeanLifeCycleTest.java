@@ -36,14 +36,26 @@ public class BeanLifeCycleTest {
     @Configuration
     static class LifeCycleConfig {
 
-        @Bean // Bean 수동설정
+        /*
+        * 설정 정보에 @Bean(initMethod = "init", destroyMethod = "close") 처럼 초기화, 소멸 메서드를 지정할 수 있다.
+        * [ 특징 ]
+        * ㄱ. 메서드 이름을 자유롭게 줄 수 있다.
+        * ㄴ. 스프링 빈이 스프링 코드에 의존하지 않는다.
+        * ㄷ. 코드가 아니라 설정 정보를 사용하기 때문에 코드를 고칠 수 없는 외부 라이브러리에도 초기화, 종료 메서드를 적용할 수 있다.
+        *
+        * [ destroyMethod() 메서드의 추론 기능 ]
+        * @Bean의 destroyMethod 속성에는 아주 특별한 기능이 있다.
+        * 대부분의 라이브러리는 close() , shutdown() 이라는 이름의 종료 메서드를 사용한다.
+        * @Bean의 destroyMethod 는 기본값이 "(inferred)" (추론)으로 등록되어 있다.
+        * 이 추론 기능은 close , shutdown 라는 이름의 메서드를 자동으로 호출해준다. 이름 그대로 종료 메서드를 추론해서 호출해준다.
+        * 따라서 직접 스프링 빈으로 등록하면 종료 메서드는 따로 적어주지 않아도 잘 동작한다.
+        * 추론 기능을 사용하기 싫으면 destroyMethod="" 처럼 빈 공백을 지정하면 된다.
+        * */
+        @Bean(initMethod = "init", destroyMethod = "close")
         public NetworkClient networkClient(){ // 인터페이스 없이 바로 구현체만 정의했음.
             NetworkClient networkClient = new NetworkClient();
             networkClient.setUrl("http://hello-spring.dev");
             return networkClient;
         }
     }
-
-
-
 }
