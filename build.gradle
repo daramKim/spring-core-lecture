@@ -26,6 +26,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter'
+	// javax.inject.Provider: JSR-330 자바 표준
+	implementation 'javax.inject:javax.inject:1'
 
 	//lombok 라이브러리 추가 시작
 	compileOnly 'org.projectlombok:lombok'
