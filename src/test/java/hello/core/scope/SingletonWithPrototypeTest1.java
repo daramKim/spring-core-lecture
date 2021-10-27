@@ -1,6 +1,8 @@
 package hello.core.scope;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Scope;
 
@@ -39,19 +41,32 @@ public class SingletonWithPrototypeTest1 {
 
         ClientBean bean2 = ac.getBean(ClientBean.class);
         int count2 = bean2.logic();
-        assertThat(count2).isEqualTo(2);
+        assertThat(count2).isEqualTo(1);
 
     }
 
     @Scope("singleton")
     static class ClientBean {
-        private final PrototypeBean prototypeBean; // 생성시점에 주입됨. 그 후 주입된 의존성을 계속 사용함. == 같은 것을 계속 쓴다는 말임.
 
-        public ClientBean(PrototypeBean prototypeBean) {
-            this.prototypeBean = prototypeBean;
-        }
+        /*
+        * 의존관계를 외부에서 주입(DI) 받는게 아니라 이렇게 직접 필요한 의존관계를 찾는 것을
+        * Dependency Lookup (DL) 의존관계 조회(탐색) 이라한다.
+        * 스프링에는 이미 모든게 준비되어 있다. ( ObjectFactory, ObjectProvider )
+        * 지정한 빈을 컨테이너에서 대신 찾아주는 DL 서비스를 제공하는 것이 바로 ObjectProvider 이다. 참고로
+        * 과거에는 ObjectFactory 가 있었는데, 여기에 편의 기능을 추가해서 ObjectProvider 가 만들어졌다.
+        * ObjectProvider 의 getObject() 를 호출하면 내부에서는 스프링 컨테이너를 통해 해당 빈을 찾아서 반환한다. (DL)
+        * 스프링이 제공하는 기능을 사용하지만, 기능이 단순하므로 단위테스트를 만들거나 mock 코드를 만들기는 훨씬 쉬워진다.
+        *
+        * ObjectFactory: 기능이 단순, 별도의 라이브러리 필요 없음, 스프링에 의존
+        * ObjectProvider: ObjectFactory 상속, 옵션, 스트림 처리등 편의 기능이 많고, 별도의 라이브러리 필요 없음, 스프링에 의존
+        *
+        * */
+        @Autowired
+        // private ObjectFactory<PrototypeBean> prototypeBeanProvider;
+        private ObjectProvider<PrototypeBean> prototypeBeanProvider;
 
         public int logic(){
+            PrototypeBean prototypeBean = prototypeBeanProvider.getObject();
             prototypeBean.addCount();
             int count = prototypeBean.getCount();
             return count;
